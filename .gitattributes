@@ -1,0 +1,6 @@
+# Engines pin these files by SHA-256 of their exact bytes, so every checkout,
+# on every platform, must keep LF line endings.
+* text=auto eol=lf
+*.ppm binary
+*.pgm binary
+*.pfm binary

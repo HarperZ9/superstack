@@ -1,0 +1,11 @@
+Text: CC BY 4.0. Code: MIT.
+
+The prose in SPEC.md, README.md, VENDORING.md, docs/ and examples/README.md
+is licensed under the Creative Commons Attribution 4.0 International licence:
+https://creativecommons.org/licenses/by/4.0/
+
+Copyright (c) 2026 Zain Dana Harper.
+
+Everything else in this repository (superstack.py, superstack.mjs,
+superstack.hpp, vectors/, tests/, tools/, examples/ code and data) is under
+the MIT licence in LICENSE.
