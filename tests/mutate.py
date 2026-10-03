@@ -107,6 +107,8 @@ def main(argv):
                 else:
                     problems.append(f"{lang} {m['id']}: exit {r.returncode}, FAIL from {m['caught_by']}: {tagged}")
                     print(f"SURVIVED {lang:3} {m['id']}")
+                    tail = (r.stdout + r.stderr).strip().splitlines()[-15:]
+                    print("\n".join("    | " + line for line in tail))
         if cxx:  # leave the C++ build on the baseline
             cxx.compile((ROOT / FILES["cpp"]).read_text(encoding="utf-8"))
     for p in problems:
