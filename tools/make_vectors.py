@@ -8,7 +8,8 @@ implementations are written separately and must reproduce every value.
 
 Usage:
   python tools/make_vectors.py           write the files
-  python tools/make_vectors.py --check   exit 1 if the files on disk differ
+  python tools/make_vectors.py --check   exit 1 if the files on disk differ from
+                                         the generator (floats within 1e-12)
 """
 from __future__ import annotations
 
@@ -399,21 +400,69 @@ def render():
     return files
 
 
-def main():
-    check = "--check" in sys.argv
-    files = render()
-    VEC.mkdir(exist_ok=True)
-    bad = []
+def _close(a, b, path, worst):
+    """Deep compare; floats may differ by 1e-12 relative (platform maths libraries)."""
+    if isinstance(a, float) or isinstance(b, float):
+        if isinstance(a, (int, float)) and isinstance(b, (int, float)) and not isinstance(a, bool):
+            dev = abs(a - b) / max(1.0, abs(a), abs(b))
+            worst[0] = max(worst[0], dev)
+            return dev <= 1e-12 or [path]
+        return [path]
+    if isinstance(a, dict) and isinstance(b, dict):
+        if a.keys() != b.keys():
+            return [path]
+        bad = []
+        for k in a:
+            r = _close(a[k], b[k], f"{path}.{k}", worst)
+            bad += r if isinstance(r, list) else []
+        return bad
+    if isinstance(a, list) and isinstance(b, list):
+        if len(a) != len(b):
+            return [path]
+        bad = []
+        for i, (x, y) in enumerate(zip(a, b)):
+            r = _close(x, y, f"{path}[{i}]", worst)
+            bad += r if isinstance(r, list) else []
+        return bad
+    return [] if a == b and type(a) is type(b) else [path]
+
+
+def check(files) -> int:
+    """Exit status for --check. Exact text equality is expected on the platform
+    that generated the files. Elsewhere, values computed through sin, tan, pow,
+    cbrt or log10 may differ in the last bits, which the runners already allow
+    for, so this compares values with a 1e-12 relative bound instead."""
+    bad, worst = [], [0.0]
     for name, text in files.items():
+        if name == "MANIFEST.json":
+            continue
         p = VEC / name
-        if check:
-            if not p.exists() or p.read_text(encoding="utf-8") != text:
-                bad.append(name)
-        else:
-            p.write_text(text, encoding="utf-8", newline="\n")
-    if check:
-        print("vectors match the generator" if not bad else f"vectors differ: {bad}")
-        sys.exit(1 if bad else 0)
+        if not p.exists():
+            bad.append(f"{name}: missing")
+            continue
+        disk = p.read_text(encoding="utf-8")
+        if disk != text:
+            bad += [f"{name}: {x}" for x in _close(json.loads(disk), json.loads(text), "$", worst)]
+    manifest = json.loads((VEC / "MANIFEST.json").read_text(encoding="utf-8"))
+    for name, digest in manifest["files"].items():
+        if hashlib.sha256((VEC / name).read_bytes()).hexdigest() != digest:
+            bad.append(f"MANIFEST.json: stale pin for {name}")
+    if set(manifest["files"]) != {n for n in files if n != "MANIFEST.json"}:
+        bad.append("MANIFEST.json: file list differs")
+    for b in bad[:20]:
+        print("DIFF", b)
+    print(f"largest float deviation from the generator: {worst[0]:.3g}")
+    print("vectors match the generator" if not bad else f"{len(bad)} differences")
+    return 1 if bad else 0
+
+
+def main():
+    files = render()
+    if "--check" in sys.argv:
+        sys.exit(check(files))
+    VEC.mkdir(exist_ok=True)
+    for name, text in files.items():
+        (VEC / name).write_text(text, encoding="utf-8", newline="\n")
     print(f"wrote {len(files)} files to {VEC}")
 
 
