@@ -44,7 +44,7 @@
 // three must pass every file in vectors/. Bytes are Uint8Array throughout.
 
 export const CONTRACT = 'superstack/0';
-export const VERSION = '0.1.0';
+export const VERSION = '0.2.0';
 export const RECEIPT_SCHEMA = 'superstack.receipt/1';
 export const SCENE_KINDS = Object.freeze(['superstack.scene/1', 'superstack.sound/1']);
 const MAX_SAFE = Number.MAX_SAFE_INTEGER;

@@ -67,7 +67,7 @@
 namespace superstack {
 
 inline constexpr std::string_view CONTRACT = "superstack/0";
-inline constexpr std::string_view VERSION = "0.1.0";
+inline constexpr std::string_view VERSION = "0.2.0";
 inline constexpr std::string_view RECEIPT_SCHEMA = "superstack.receipt/1";
 inline constexpr std::int64_t MAX_SAFE_INTEGER = 9007199254740991LL;
 using Bytes = std::vector<std::uint8_t>;

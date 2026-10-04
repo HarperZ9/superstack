@@ -54,7 +54,7 @@ import math
 import re
 
 CONTRACT = "superstack/0"
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 RECEIPT_SCHEMA = "superstack.receipt/1"
 SCENE_KINDS = ("superstack.scene/1", "superstack.sound/1")
 MAX_SAFE_INTEGER = 2 ** 53 - 1
