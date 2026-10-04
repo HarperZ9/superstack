@@ -1,5 +1,21 @@
-<!-- writing-profile: readme -->
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/HarperZ9/superstack/main/docs/art/hero-dark.svg">
+  <img src="https://raw.githubusercontent.com/HarperZ9/superstack/main/docs/art/hero-light.svg" alt="superstack: One contract for renderers and sound engines, checked byte for byte. A chain of small linked squares, each holding a few ruled lines, winds inward to a bright core." width="100%">
+</picture>
+
 # superstack
+
+One contract for renderers and sound engines, checked byte for byte.
+
+```
+git clone https://github.com/HarperZ9/superstack && cd superstack
+```
+
+[![version: 0.2.0](https://img.shields.io/badge/version-0.2.0-e6e1d6?style=flat-square&labelColor=1a1712)](https://github.com/HarperZ9/superstack/releases/latest)
+[![CI](https://github.com/HarperZ9/superstack/actions/workflows/ci.yml/badge.svg)](https://github.com/HarperZ9/superstack/actions/workflows/ci.yml)
+[![license](https://img.shields.io/badge/license-FSL--1.1--MIT-e6e1d6?style=flat-square&labelColor=1a1712)](https://github.com/HarperZ9/superstack/blob/main/LICENSE)
+
+<!-- writing-profile: readme -->
 
 One contract for renderers and sound engines, so a frame or a sound made by one engine can be checked against another, byte for byte.
 
