@@ -72,18 +72,22 @@ using Array = std::vector<Value>;
 using Object = std::vector<Member>;  // insertion order; canonical() sorts
 
 struct Value {
-  std::variant<std::nullptr_t, bool, std::int64_t, double, std::string, Array, Object> v{nullptr};
-  Value() = default;
-  Value(std::nullptr_t) {}
-  Value(bool b) : v(b) {}
-  Value(int i) : v(std::int64_t{i}) {}
-  Value(long i) : v(static_cast<std::int64_t>(i)) {}
-  Value(long long i) : v(static_cast<std::int64_t>(i)) {}
-  Value(unsigned u) : v(std::int64_t{u}) {}
-  Value(double d) : v(d) {}
-  Value(const char* s) : v(std::string(s)) {}
-  Value(std::string s) : v(std::move(s)) {}
-  Value(std::string_view s) : v(std::string(s)) {}
+  std::variant<std::nullptr_t, bool, std::int64_t, double, std::string, Array, Object> v;
+  // The constructors are declared here and defined after Member, and v has no
+  // default member initializer, so nothing builds the variant while Member is
+  // still incomplete. libc++ (Emscripten, Clang) rejects that; libstdc++ and
+  // MSVC accept it.
+  Value();
+  Value(std::nullptr_t);
+  Value(bool b);
+  Value(int i);
+  Value(long i);
+  Value(long long i);
+  Value(unsigned u);
+  Value(double d);
+  Value(const char* s);
+  Value(std::string s);
+  Value(std::string_view s);
   Value(Array a);
   Value(Object o);
 
@@ -114,6 +118,17 @@ struct Member {
   Value value;
 };
 
+inline Value::Value() : v(nullptr) {}
+inline Value::Value(std::nullptr_t) : v(nullptr) {}
+inline Value::Value(bool b) : v(b) {}
+inline Value::Value(int i) : v(std::int64_t{i}) {}
+inline Value::Value(long i) : v(static_cast<std::int64_t>(i)) {}
+inline Value::Value(long long i) : v(static_cast<std::int64_t>(i)) {}
+inline Value::Value(unsigned u) : v(std::int64_t{u}) {}
+inline Value::Value(double d) : v(d) {}
+inline Value::Value(const char* s) : v(std::string(s)) {}
+inline Value::Value(std::string s) : v(std::move(s)) {}
+inline Value::Value(std::string_view s) : v(std::string(s)) {}
 inline Value::Value(Array a) : v(std::move(a)) {}
 inline Value::Value(Object o) : v(std::move(o)) {}
 inline const Value* Value::find(std::string_view key) const {
