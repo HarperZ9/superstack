@@ -163,3 +163,9 @@ jobs:
           python-version: "3.12"
       - name: No em or en dashes in prose
         run: python tools/check_dashes.py
+  art-receipts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify art receipt digests
+        run: python3 scripts/check_art_receipts.py
