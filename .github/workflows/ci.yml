@@ -21,6 +21,11 @@ jobs:
       run:
         shell: bash
     steps:
+      # Windows leg: check out the way a default Git for Windows install does, so a
+      # line-ending rewrite of a pinned file fails here instead of on a reader's machine.
+      - name: Use the Git for Windows line-ending default
+        if: runner.os == 'Windows'
+        run: git config --global core.autocrlf true
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
@@ -57,6 +62,16 @@ jobs:
           EOF
       - name: Paired mutations
         run: python tests/mutate.py
+      - name: Sealed files are checked out byte for byte
+        if: ${{ !cancelled() }}
+        run: |
+          git ls-files -s -- ":(attr:-text)" | while read -r mode sha stage path; do
+            if [ "$(git hash-object --no-filters -- "$path")" != "$sha" ]; then
+              echo "checkout rewrote a sealed file: $path"
+              exit 1
+            fi
+          done
+          echo "every sealed file matches its committed blob"
 
   wasm:
     name: C++ header under Emscripten (wasm, run in Node)
@@ -118,6 +133,11 @@ jobs:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
+      # Windows leg: check out the way a default Git for Windows install does, so a
+      # line-ending rewrite of a pinned file fails here instead of on a reader's machine.
+      - name: Use the Git for Windows line-ending default
+        if: runner.os == 'Windows'
+        run: git config --global core.autocrlf true
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
