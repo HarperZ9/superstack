@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: FSL-1.1-MIT
 """superstack.sound/1 reference renderer (offline, exact path, stdlib only).
 
 The score comes from the seed rule: xmur3(seed) feeds mulberry32, and each

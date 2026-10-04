@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: FSL-1.1-MIT
 """Fail when any Markdown file in the repository contains an em or en dash.
 Usage: python tools/check_dashes.py"""
 import pathlib
