@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: FSL-1.1-MIT
 """False-success controls: show the check fails when it should.
 
 1. Wrong scene: the Python backend renders AO radius 1.5 instead of 2. Must be refuted.

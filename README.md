@@ -5,7 +5,9 @@ One contract for renderers and sound engines, so a frame or a sound made by one 
 
 You get one file for your language. It writes a canonical hash of any scene, draws the same random numbers from the same seed string, keeps time on one integer clock, and seals a receipt that says two things: whether your bytes equal the reference (MATCH or DRIFT), and whether they fall within tolerance (verified, refuted or unverifiable). Every receipt also lists what it does not prove.
 
-Text: CC BY 4.0. Code: MIT.
+Text: CC BY 4.0. Code: FSL-1.1-MIT.
+
+From v0.2.0, code is licensed FSL-1.1-MIT. Earlier releases remain under MIT. Each release turns MIT two years after it ships. [docs/LICENSING.md](docs/LICENSING.md) explains what that means for engines that vendor a file.
 
 ## Run it now
 

@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: FSL-1.1-MIT
 """Rebuild every example output, reconcile it, and run the controls.
 
   python examples/run_all.py           everything available on this machine

@@ -13,7 +13,7 @@ An engine uses the contract by copying one file into its own tree and pinning th
 
 ## 2. Copy it from a release
 
-1. Take the file from a tagged release, for example `v0.1.0`, never from a branch.
+1. Take the file from a tagged release, for example `v0.2.0`, never from a branch.
 2. Take `SHA256SUMS` from the same tag. It lists the hash of each implementation.
 3. Copy the file byte for byte. You may rename it (the site keeps it as `system/media-engine/contracts.mjs`). Do not edit it: any change, even whitespace, changes the hash.
 4. Keep LF line endings. Add this line to your `.gitattributes`, with your own path:
@@ -27,10 +27,10 @@ An engine uses the contract by copying one file into its own tree and pinning th
 5. Record the pin next to the copy, for example in a `SUPERSTACK.sha256` file or a comment in your build config:
 
    ```
-   <sha256 from SHA256SUMS>  system/media-engine/contracts.mjs  superstack.mjs v0.1.0
+   <sha256 from SHA256SUMS>  system/media-engine/contracts.mjs  superstack.mjs v0.2.0
    ```
 
-The file carries its whole MIT notice, so the copy needs nothing else to meet the licence. `docs/LICENSING.md` covers vendoring into reserved, AGPL, FSL and Fair Source projects.
+The file carries its whole licence notice: FSL-1.1-MIT from v0.2.0, the MIT text it turns into, and the notices for the public domain algorithms it contains. The copy needs nothing else to meet the licence. Releases up to v0.1.0 remain MIT. `docs/LICENSING.md` covers vendoring into each consumer.
 
 ## 3. Check the copy in CI
 

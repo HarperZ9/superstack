@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: FSL-1.1-MIT
 """Write vectors/*.json and vectors/MANIFEST.json.
 
 Expected values come from superstack.py, except where an independent anchor
