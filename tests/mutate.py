@@ -56,7 +56,10 @@ class Cxx:
 
 def runner_cmd(lang, impl: Path, cxx: Cxx | None):
     if lang == "py":
-        return [sys.executable, ROOT / "tests" / "run_vectors.py", "--impl", impl]
+        # -B: no bytecode cache. Python keys its cache on source mtime in whole
+        # seconds and size, so two same-length mutants written within one
+        # second would load the first one's bytecode for the second.
+        return [sys.executable, "-B", ROOT / "tests" / "run_vectors.py", "--impl", impl]
     if lang == "js":
         return ["node", ROOT / "tests" / "run_vectors.mjs", "--impl", impl]
     return [cxx.exe(), ROOT]
@@ -93,6 +96,8 @@ def main(argv):
                     problems.append(f"{lang} {m['id']}: target text occurs {source.count(find)} times")
                     continue
                 mutant = source.replace(find, repl)
+                impl = work / lang / m["id"] / FILES[lang]  # a fresh path per mutant
+                impl.parent.mkdir(parents=True, exist_ok=True)
                 impl.write_text(mutant, encoding="utf-8", newline="\n")
                 if lang == "cpp":
                     ok, log = cxx.compile(mutant)
