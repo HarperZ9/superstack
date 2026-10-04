@@ -58,6 +58,44 @@ jobs:
       - name: Paired mutations
         run: python tests/mutate.py
 
+  wasm:
+    name: C++ header under Emscripten (wasm, run in Node)
+    runs-on: ubuntu-24.04
+    env:
+      EMSDK_VERSION: 6.0.11
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install emsdk ${{ env.EMSDK_VERSION }}
+        run: |
+          git clone https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+          cd "$RUNNER_TEMP/emsdk"
+          ./emsdk install "$EMSDK_VERSION"
+          ./emsdk activate "$EMSDK_VERSION"
+      - name: Build the C++ runner with em++
+        run: |
+          source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+          em++ --version
+          emcmake cmake -S tests -B build-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-wasm
+      - name: C++ vectors in Node
+        run: node build-wasm/run_vectors.js . --summary wasm.json
+      - name: Python vectors for comparison
+        run: python tests/run_vectors.py --summary py.json
+      - name: Equal check counts in wasm and Python
+        run: |
+          python - <<'PY'
+          import json, sys
+          c = {n: json.load(open(f"{n}.json")) for n in ("py", "wasm")}
+          print(json.dumps(c, indent=1, sort_keys=True))
+          sys.exit(0 if c["py"] == c["wasm"] else 1)
+          PY
+
   floor:
     name: oldest supported runtimes (Python 3.11, Node 20)
     runs-on: ubuntu-latest
