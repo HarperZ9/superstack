@@ -68,7 +68,7 @@ The examples rebuild a proof from 3 October 2026: one scene, three pixel engines
 | Control: one byte flipped | DRIFT | verified | 1 pixel, 1 level |
 | Control: one voice one sample late | DRIFT | refuted | 15.95 dB SNR |
 
-Observed on one Windows 11 workstation (Chromium 145, Python 3.12, Node 25). It does not show equality across GPU vendors or drivers, and the pixel reference's own certificate refutes its screen-space AO against its ray-traced AO on this view. [examples/README.md](examples/README.md) has the commands and the limits.
+Observed on one Windows 11 workstation (Chromium 145, Python 3.12, Node 25). In CI on GitHub's Ubuntu 24.04 and Windows runners, the numpy port and both exact sound paths also gave the same hashes (`0282ef9c...` and `692ead20...`). It does not show equality across GPU vendors or drivers, and the pixel reference's own certificate refutes its screen-space AO against its ray-traced AO on this view. [examples/README.md](examples/README.md) has the commands and the limits.
 
 Conformance: 383 vector checks pass in each of the three languages, with equal check counts. 59 paired mutations, one-line breaks to a single rule, are each caught by the vector file named for that rule.
 

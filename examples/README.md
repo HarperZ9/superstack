@@ -49,6 +49,8 @@ Windows 11, RTX 4090, Chromium 145.0.7632.6, Python 3.12.10 with numpy 2.4.5, No
 | Sound, JavaScript in Node and in Chromium | MATCH | verified | `692ead20...` |
 | Sound, WebAudio | DRIFT | verified | at most 1 LSB, 94.39 % of samples exact, 82.39 dB SNR |
 
+In CI on GitHub's Ubuntu 24.04 and Windows runners, the numpy port and both exact sound paths gave the same content hashes as above. That is two more machines, both CPU paths; no GPU ran there.
+
 The sound is classed `interactive` and its loudness check is verified: -20.7 LUFS is under the -18 LUFS ceiling, and its peak of -10.89 dBFS is under -1 dBFS.
 
 ## Does not prove
