@@ -64,6 +64,58 @@ The [animated explainer](https://harperz9.github.io/repo-explainers/superstack.h
 walks through canonical JSON, the seed rule, the flick clock, a sealed sound receipt and what fails its verification, and the proof scene with its three controls. Every value on it is output from this repository. Its
 source is [docs/explainer/index.html](docs/explainer/index.html).
 
+## Watch
+
+[![Re-derive it. Don't take it on trust.: a narrated film, 2 min 5 s](https://harperz9.github.io/media/explainers/rederive/poster.jpg)](https://harperz9.github.io/explainers.html#rederive-h)
+
+**[Re-derive it. Don't take it on trust.](https://harperz9.github.io/explainers.html#rederive-h)** (2 min 5 s, narrated, captioned). superstack checks every language against the same vectors, byte for byte. The film page carries the transcript, the sources and recall questions.
+
+Video walkthrough: coming with the next release.
+
+## Walkthrough
+
+Install it, run it once, then use the main feature. Each command below is real, and so is its output.
+
+1. **Get it.** Clone the repository. Python 3.11 or newer and Node 20 or newer; no install step.
+
+   ```text
+   $ git clone https://github.com/HarperZ9/superstack && cd superstack
+   ```
+
+2. **First run: the shared vectors.** Run the same 383 checks in each language.
+
+   ```text
+   $ python tests/run_vectors.py
+   python: 383/383 checks passed
+   $ node tests/run_vectors.mjs
+   javascript: 383/383 checks passed
+   ```
+
+3. **Seal a receipt.** In Python, seal a receipt over quantized audio samples.
+
+   ```text
+   >>> ss.make_receipt(producer='my-synth', ..., content=ss.quantize_s16([0.0, 0.25, -0.25, 0.5]))
+   schema          superstack.receipt/1
+   scene_sha256    42fbae6d8011ad33...
+   seed_rule       xmur3-mulberry32/1
+   duration_flicks 58800
+   content_sha256  33b047ac8f974190...
+   does_not_prove  A PCM hash says nothing about how a device plays the sound.
+   receipt_sha256  9b10693f6e0f65eb...
+   ```
+
+4. **The proof scene.** Run every example with its controls.
+
+   ```text
+   $ python examples/run_all.py --ci
+   pixels python               MATCH verified
+   sound  sound-js-exact       MATCH verified
+   control wrong_ao_radius          DRIFT refuted   as expected
+   control one_byte_flipped         DRIFT verified  as expected
+   control sound_one_sample_late    DRIFT refuted   as expected
+   examples: all expectations held
+   ```
+
 ## What the contract fixes
 
 | Rule | In one line | Spec |
