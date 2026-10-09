@@ -58,6 +58,12 @@ ss.canonical({ b: 1.0, a: 1e-7 });          // '{"a":0.0000001,"b":1}', the same
 ss.rng('folded-light').nextFloat();         // the same stream in every language
 ```
 
+## See it work, step by step
+
+The [animated explainer](https://harperz9.github.io/repo-explainers/superstack.html)
+walks through canonical JSON, the seed rule, the flick clock, a sealed sound receipt and what fails its verification, and the proof scene with its three controls. Every value on it is output from this repository. Its
+source is [docs/explainer/index.html](docs/explainer/index.html).
+
 ## What the contract fixes
 
 | Rule | In one line | Spec |
