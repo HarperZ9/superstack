@@ -226,13 +226,13 @@ ol.walkthrough p{margin:0 0 .3rem;max-width:44rem}
       </div></li>
       <li class="step" tabindex="-1" data-scene="k2" data-state="s"><div class="card">
         <span class="num">03</span><h3>Time on one integer clock</h3>
-        <p>Time is counted in flicks, 705,600,000 per second. Common frame and sample rates land on whole numbers: one sample at 48 kHz is 14,700 flicks and at 44.1 kHz is 16,000. Four samples at 48 kHz last 58,800 flicks, with no rounding.</p>
+        <p>Time is counted in flicks, 705,600,000 per second. Common frame and sample rates land on whole numbers: one sample at 48 kHz is 14,700 flicks and at 44.1 kHz is 16,000. Four samples at 48 kHz last exactly 58,800 flicks.</p>
         <p class="src">Source: SPEC.md, section 5</p>
       </div></li>
       <li class="step" tabindex="-1" data-scene="k3" data-state="s"><div class="card">
         <span class="num">04</span><h3>Seal a receipt</h3>
-        <p>Four float samples are quantised to 16-bit PCM and hashed. <code>make_receipt</code> records the scene hash, the seed, the clock, the media description with its access settings (no autoplay, a reduced-sound mode) and the content hash, then seals the whole receipt with SHA-256.</p>
-        <p>A <code>does_not_prove</code> line is required: here, that a PCM hash says nothing about how a device plays the sound.</p>
+        <p>Four float samples are quantised to 16-bit PCM and hashed. <code>make_receipt</code> records the scene hash, the seed, the clock, the media description with its access settings (autoplay off, a reduced-sound mode) and the content hash, then seals the whole receipt with SHA-256.</p>
+        <p>Every receipt carries a required <code>does_not_prove</code> field naming its limit. This one records that a PCM hash covers the samples, and playback on a device is outside it.</p>
         <p class="src">Source: <a href="https://github.com/HarperZ9/superstack/blob/7587e22f88f08a8ef589fb3a29bc0943172a9f44/superstack.py">superstack.py</a>, <code>make_receipt</code>; SPEC.md, section 6</p>
       </div></li>
       <li class="step" tabindex="-1" data-scene="k4" data-state="s"><div class="card">
@@ -254,7 +254,7 @@ ol.walkthrough p{margin:0 0 .3rem;max-width:44rem}
   <h2 id="walkthrough">Walkthrough</h2>
   <p class="measure">Install it, run it once, then use the main feature. Each command below is real, and so is its output.</p>
   <ol class="walkthrough">
-    <li><h3>Get it</h3><p>Clone the repository. Python 3.11 or newer and Node 20 or newer; no install step.</p>
+    <li><h3>Get it</h3><p>Clone the repository. Python 3.11 or newer and Node 20 or newer, run in place.</p>
 <pre class="cmd"><code>$ git clone https://github.com/HarperZ9/superstack && cd superstack</code></pre></li>
     <li><h3>First run: the shared vectors</h3><p>Run the same 383 checks in each language.</p>
 <pre class="cmd"><code>$ python tests/run_vectors.py
@@ -279,16 +279,16 @@ control one_byte_flipped         DRIFT verified  as expected
 control sound_one_sample_late    DRIFT refuted   as expected
 examples: all expectations held</span></code></pre></li>
   </ol>
-  <p class="src">Output from superstack at 7587e22 on Windows with Python 3.12 and Node 25. The C++ runner was not built for this page; the README reports 383 checks for it too.</p>
+  <p class="src">Output from superstack at 7587e22 on Windows with Python 3.12 and Node 25. This page ran the Python and Node runners; the README reports 383 checks for the C++ runner too.</p>
 </section>
 
 <section class="block wrap" aria-labelledby="limits">
-  <h2 id="limits">What it does not do</h2>
+  <h2 id="limits">Limits</h2>
   <ul class="limits">
-    <li>A content hash proves the bytes. It says nothing about how a screen shows them or a device plays them, and each receipt says so in its own words.</li>
-    <li>The proof observed equality on one workstation and on CI runners. It does not show equality across GPU vendors or drivers.</li>
+    <li>A content hash proves the bytes. Display and playback sit outside it, and each receipt names that in its <code>does_not_prove</code> field.</li>
+    <li>The proof observed equality on one workstation and on CI runners. Other GPU vendors and drivers are still to be tested.</li>
     <li>The pixel reference's own certificate refutes its screen-space AO against its ray-traced AO on the proof view. The contract checks agreement between engines. Whether the reference is good is a separate question.</li>
-    <li>Narration backends are never references. Their output is checked for tolerance only.</li>
+    <li>Narration backends are checked against a tolerance, and the references come from the engines.</li>
   </ul>
   <p class="src">Source: README.md at 7587e22, "Evidence"; SPEC.md, section 8</p>
 </section>
